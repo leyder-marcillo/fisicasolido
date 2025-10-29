@@ -25,16 +25,28 @@ export default function Home() {
 
   const { data: topics = [], isLoading: topicsLoading } = useQuery<Topic[]>({
     queryKey: ['/api/topics'],
+    queryFn: async () => {
+      const res = await fetch('/api/topics');
+      if (!res.ok) throw new Error('Error al cargar temas');
+      return res.json();
+    },
   });
-
   const { data: formulas = [], isLoading: formulasLoading } = useQuery<Formula[]>({
     queryKey: ['/api/formulas'],
+    queryFn: async () => {
+      const res = await fetch('/api/formulas');
+      if (!res.ok) throw new Error('Error al cargar fórmulas');
+      return res.json();
+    },
   });
-
   const { data: exercises = [], isLoading: exercisesLoading } = useQuery<Exercise[]>({
     queryKey: ['/api/exercises'],
+    queryFn: async () => {
+      const res = await fetch('/api/exercises');
+      if (!res.ok) throw new Error('Error al cargar ejercicios');
+      return res.json();
+    },
   });
-
   const getTopicIcon = (icon: string) => {
     return TOPIC_ICONS[icon as keyof typeof TOPIC_ICONS] || TOPIC_ICONS.default;
   };
