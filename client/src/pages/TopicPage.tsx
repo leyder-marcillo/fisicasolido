@@ -12,11 +12,17 @@ export default function TopicPage() {
   const [, params] = useRoute('/topic/:id');
   const topicId = params?.id;
 
-  const { data: topic, isLoading: topicLoading } = useQuery<Topic>({
-    queryKey: ['/api/topics', topicId],
-    enabled: !!topicId,
+  const { data: topics = [], isLoading: topicsLoading } = useQuery<Topic[]>({
+    queryKey: ['/api/topics'],
+    queryFn: async () => {
+      const res = await fetch('/api/topics');
+      if (!res.ok) throw new Error('Error al cargar temas');
+      return res.json();
+    },
   });
 
+  const topic = topics.find(t => t.id === topicId || t.slug === topicId);
+  
   const { data: formulas = [], isLoading: formulasLoading } = useQuery<Formula[]>({
     queryKey: ['/api/formulas'],
   });
@@ -28,7 +34,7 @@ export default function TopicPage() {
   const topicFormulas = formulas.filter(f => f.topicId === topicId);
   const topicExercises = exercises.filter(e => e.topicId === topicId);
 
-  if (topicLoading) {
+  if (topicsLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
