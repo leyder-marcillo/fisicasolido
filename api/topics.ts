@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
-
-export const GET = async () => {
+export default async function handler(req: Request): Promise<Response> {
   const topics = [
     {
       id: "1",
@@ -12,8 +10,19 @@ export const GET = async () => {
         { id: "q2", question: "What is a crystal system?", answer: "..." }
       ]
     },
-    // otros temas...
+    {
+      id: "2",
+      name: "Teoria de Bandas",
+      description: "Estudo da estrutura eletrônica de sólidos...",
+      slug: "band-theory",
+      questions: [
+        { id: "q3", question: "What is a semiconductor?", answer: "..." },
+        { id: "q4", question: "What is a band gap?", answer: "..." }
+      ]
+    }
   ];
 
-  return NextResponse.json(topics);
-};
+  return new Response(JSON.stringify(topics), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
