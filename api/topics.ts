@@ -1,4 +1,4 @@
-export default async function handler(request: Request): Promise<Response> {
+export default function handler(req, res) {
   const topics = [
     {
       id: "1",
@@ -24,7 +24,5 @@ export default async function handler(request: Request): Promise<Response> {
     }
   ];
 
-  return new Response(JSON.stringify(topics), {
-    headers: { "Content-Type": "application/json" },
-  });
+  res.status(200).json(topics);
 }
